@@ -58,6 +58,7 @@ export class LoginComponent {
       .subscribe({
         next: (response) => {
           this.loginResponse = response;
+          this.userService.setToken(response.token);
           this.loading = false;
         },
         error: (error: HttpErrorResponse) => {

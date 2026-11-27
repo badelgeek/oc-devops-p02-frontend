@@ -1,8 +1,12 @@
 <div class="app-container">
   <nav class="navigation" aria-label="Authentication">
     <button class="btn btn-primary mr-1" routerLink="/">Home</button>
-    <button class="btn btn-secondary mr-1" routerLink="/login">Login</button>
-    <button class="btn btn-secondary" routerLink="/register">Register</button>
+    @if (userService.getToken()) {
+      <button class="btn btn-secondary mr-1" routerLink="/users">Users</button>
+    } @else {
+      <button class="btn btn-secondary mr-1" routerLink="/login">Login</button>
+      <button class="btn btn-secondary" routerLink="/register">Register</button>
+    }
   </nav>
 
   <main>
