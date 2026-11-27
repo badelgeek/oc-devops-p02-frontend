@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserListResponse } from '../models/UserListResponse';
 import { CreateUserRequest } from '../models/CreateUserRequest';
+import { UserDetail } from '../models/UserDetail';
 
 @Injectable({
   providedIn: 'root',
@@ -32,6 +33,10 @@ export class UserService {
 
   getUsers(): Observable<UserListResponse> {
     return this.httpClient.get<UserListResponse>('/api/users');
+  }
+
+  getUser(id: number): Observable<UserDetail> {
+    return this.httpClient.get<UserDetail>(`/api/users/${id}`);
   }
 
   addUser(user: CreateUserRequest): Observable<void> {

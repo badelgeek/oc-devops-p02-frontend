@@ -1,0 +1,22 @@
+.user-detail-page {
+  padding: 1.5rem;
+}
+
+dt {
+  font-weight: 700;
+  margin-top: 1rem;
+}
+
+dd {
+  margin: 0.25rem 0 0;
+}
+
+form p {
+  margin: 0 0 1rem;
+}
+
+form input {
+  box-sizing: border-box;
+  width: min(100%, 24rem);
+  padding: 0.5rem;
+}

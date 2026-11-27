@@ -1,6 +1,12 @@
 <div class="users-header">
   <h1>Users</h1>
-  <a class="add-user-button" routerLink="/users/new" aria-label="Add a user" title="Add a user">+</a>
+  <a
+    class="add-user-button"
+    routerLink="/users/new"
+    aria-label="Add a user"
+    title="Add a user"
+    >+</a
+  >
 </div>
 
 @if (loading) {
@@ -16,6 +22,7 @@
         <th scope="col">User ID</th>
         <th scope="col">First name</th>
         <th scope="col">Last name</th>
+        <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
@@ -24,6 +31,18 @@
           <td>{{ user.id }}</td>
           <td>{{ user.firstName }}</td>
           <td>{{ user.lastName }}</td>
+          <td>
+            <a
+              class="details-button"
+              [routerLink]="['/users', user.id]"
+              title="View details"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </a>
+          </td>
         </tr>
       }
     </tbody>

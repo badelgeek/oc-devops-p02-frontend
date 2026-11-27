@@ -51,6 +51,10 @@ th {
   background-color: #f1f3f5;
 }
 
+tr:hover {
+  background-color: #2424ff11;
+}
+
 th:first-child,
 td:first-child {
   width: 140px;
@@ -61,4 +65,35 @@ td:nth-child(2),
 th:nth-child(3),
 td:nth-child(3) {
   width: 260px;
+}
+
+th:nth-child(4),
+td:nth-child(4) {
+  width: 40px;
+}
+
+.details-button {
+  display: inline-flex;
+  width: 2rem;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #0d6efd;
+  border-radius: 0.25rem;
+  color: #0d6efd;
+}
+
+.details-button:hover {
+  background-color: #0d6efd;
+  color: #fff;
+}
+
+.details-button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.75;
 }

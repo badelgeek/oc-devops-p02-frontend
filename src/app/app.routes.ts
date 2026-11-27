@@ -4,6 +4,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
 import { UsersComponent } from './pages/users/users.component';
 import { UserCreateComponent } from './pages/users/user-create.component';
+import { UserDetailComponent } from './pages/users/user-detail.component';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
@@ -20,13 +21,18 @@ export const routes: Routes = [
     component: RegisterComponent,
   },
   {
-    path: 'users',
-    component: UsersComponent,
+    path: 'users/new',
+    component: UserCreateComponent,
     canActivate: [authGuard],
   },
   {
-    path: 'users/new',
-    component: UserCreateComponent,
+    path: 'users/:id',
+    component: UserDetailComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'users',
+    component: UsersComponent,
     canActivate: [authGuard],
   },
 ];
