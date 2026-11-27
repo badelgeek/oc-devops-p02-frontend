@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { UserListResponse } from '../models/UserListResponse';
 import { CreateUserRequest } from '../models/CreateUserRequest';
 import { UserDetail } from '../models/UserDetail';
+import { UpdateUserRequest } from '../models/UpdateUserRequest';
 
 @Injectable({
   providedIn: 'root',
@@ -37,6 +38,10 @@ export class UserService {
 
   getUser(id: number): Observable<UserDetail> {
     return this.httpClient.get<UserDetail>(`/api/users/${id}`);
+  }
+
+  updateUser(id: number, user: UpdateUserRequest): Observable<UserDetail> {
+    return this.httpClient.put<UserDetail>(`/api/users/${id}`, user);
   }
 
   addUser(user: CreateUserRequest): Observable<void> {
