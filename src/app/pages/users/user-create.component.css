@@ -1,0 +1,18 @@
+.create-user-page {
+  padding: 1.5rem;
+}
+
+form p {
+  margin: 0 0 1rem;
+}
+
+form input {
+  box-sizing: border-box;
+  width: min(100%, 24rem);
+  padding: 0.5rem;
+}
+
+form button {
+  margin-right: 1rem;
+  padding: 0.5rem 1rem;
+}

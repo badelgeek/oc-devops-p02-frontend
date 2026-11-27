@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { RegisterRequest } from '../models/RegisterRequest';
 import { LoginRequest } from '../models/LoginRequest';
 import { LoginResponse } from '../models/LoginResponse';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserListResponse } from '../models/UserListResponse';
+import { CreateUserRequest } from '../models/CreateUserRequest';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +14,8 @@ export class UserService {
 
   private token: string | null = null;
 
-  register(user: RegisterRequest): Observable<Object> {
-    return this.httpClient.post('/api/register', user);
+  register(user: CreateUserRequest): Observable<void> {
+    return this.httpClient.post<void>('/api/register', user);
   }
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
@@ -32,5 +32,9 @@ export class UserService {
 
   getUsers(): Observable<UserListResponse> {
     return this.httpClient.get<UserListResponse>('/api/users');
+  }
+
+  addUser(user: CreateUserRequest): Observable<void> {
+    return this.httpClient.post<void>('/api/users', user);
   }
 }

@@ -3,7 +3,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, DestroyRef, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { RouterLink } from '@angular/router';
+import { finalize } from 'rxjs';
+import { Router, RouterLink } from '@angular/router';
 import { LoginRequest } from '../../core/models/LoginRequest';
 import { LoginResponse } from '../../core/models/LoginResponse';
 import { UserService } from '../../core/service/user.service';
@@ -20,6 +21,7 @@ export class LoginComponent {
   private readonly userService = inject(UserService);
   private readonly formBuilder = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
 
   readonly loginForm: FormGroup = this.formBuilder.group({
     login: ['', Validators.required],
@@ -54,16 +56,18 @@ export class LoginComponent {
 
     this.userService
       .login(credentials)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => (this.loading = false)),
+      )
       .subscribe({
         next: (response) => {
           this.loginResponse = response;
           this.userService.setToken(response.token);
-          this.loading = false;
+          this.router.navigate(['/users']);
         },
         error: (error: HttpErrorResponse) => {
           this.errorMessage = error.error?.message ?? 'La connexion a échoué.';
-          this.loading = false;
         },
       });
   }

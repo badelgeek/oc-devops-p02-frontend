@@ -1,0 +1,39 @@
+<main class="create-user-page">
+  <h1>Add a user</h1>
+
+  <form [formGroup]="createUserForm" (ngSubmit)="onSubmit()">
+    <p>
+      <label for="firstName">First name</label><br />
+      <input id="firstName" type="text" formControlName="firstName" required />
+    </p>
+    <p>
+      <label for="lastName">Last name</label><br />
+      <input id="lastName" type="text" formControlName="lastName" required />
+    </p>
+    <p>
+      <label for="login">Login</label><br />
+      <input id="login" type="text" formControlName="login" required />
+    </p>
+    <p>
+      <label for="password">Password</label><br />
+      <input
+        id="password"
+        type="password"
+        formControlName="password"
+        required
+      />
+    </p>
+
+    @if (submitted && createUserForm.invalid) {
+      <p role="alert">Please fill in all fields.</p>
+    }
+    @if (errorMessage) {
+      <p role="alert" class="text-danger">{{ errorMessage }}</p>
+    }
+
+    <button type="submit" [disabled]="loading">
+      {{ loading ? "Loading…" : "Create user" }}
+    </button>
+    <a routerLink="/users">Cancel</a>
+  </form>
+</main>

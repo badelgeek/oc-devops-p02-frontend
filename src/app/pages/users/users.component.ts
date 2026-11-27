@@ -1,27 +1,37 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
 import { UserService } from '../../core/service/user.service';
 import { UserLight } from '../../core/models/UserLight';
 
 @Component({
   selector: 'app-users',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css',
 })
 export class UsersComponent implements OnInit {
   private readonly userService = inject(UserService);
+  private readonly destroyRef = inject(DestroyRef);
 
   users: UserLight[] = [];
   loading = false;
   errorMessage = '';
 
   ngOnInit(): void {
+    this.loadUsers();
+  }
+
+  private loadUsers(): void {
     this.loading = true;
     this.userService
       .getUsers()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => (this.loading = false)),
+      )
       .subscribe({
         next: (response) => {
           this.users = response.users;

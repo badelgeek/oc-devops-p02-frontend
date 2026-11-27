@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../shared/material.module';
 import { UserService } from '../../core/service/user.service';
-import { RegisterRequest } from '../../core/models/RegisterRequest';
+import { CreateUserRequest } from '../../core/models/CreateUserRequest';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 
@@ -41,7 +41,7 @@ export class RegisterComponent implements OnInit {
     if (this.registerForm.invalid) {
       return;
     }
-    const registerUser: RegisterRequest = {
+    const registerUser: CreateUserRequest = {
       firstName: this.registerForm.get('firstName')?.value,
       lastName: this.registerForm.get('lastName')?.value,
       login: this.registerForm.get('login')?.value,
