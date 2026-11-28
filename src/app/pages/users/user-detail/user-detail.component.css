@@ -31,7 +31,37 @@
   background-color: #0a58ca;
 }
 
-.edit-user-button svg {
+.delete-user-button,
+.confirm-delete-button {
+  border: 1px solid #dc3545;
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.delete-user-button {
+  display: inline-flex;
+  width: 2rem;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.delete-user-button:hover,
+.confirm-delete-button:hover {
+  border-color: #bb2d3b;
+  background-color: #bb2d3b;
+}
+
+.confirm-delete-button {
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.edit-user-button svg,
+.delete-user-button svg {
   width: 1rem;
   height: 1rem;
   fill: none;

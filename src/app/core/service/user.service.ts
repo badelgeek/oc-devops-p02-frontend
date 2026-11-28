@@ -44,6 +44,10 @@ export class UserService {
     return this.httpClient.put<UserDetail>(`/api/users/${id}`, user);
   }
 
+  deleteUser(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`/api/users/${id}`);
+  }
+
   addUser(user: CreateUserRequest): Observable<void> {
     return this.httpClient.post<void>('/api/users', user);
   }

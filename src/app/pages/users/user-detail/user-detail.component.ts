@@ -2,11 +2,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
-import { UserDetail } from '../../core/models/UserDetail';
-import { UpdateUserRequest } from '../../core/models/UpdateUserRequest';
-import { UserService } from '../../core/service/user.service';
+import { UserDetail } from '../../../core/models/UserDetail';
+import { UpdateUserRequest } from '../../../core/models/UpdateUserRequest';
+import { UserService } from '../../../core/service/user.service';
 
 @Component({
   selector: 'app-user-detail',
@@ -16,6 +16,7 @@ import { UserService } from '../../core/service/user.service';
 })
 export class UserDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly userService = inject(UserService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly formBuilder = inject(FormBuilder);
@@ -31,15 +32,19 @@ export class UserDetailComponent implements OnInit {
 
   loading = false;
   saving = false;
+  deleting = false;
   isEditMode = false;
+  confirmDelete = false;
+  loadErrorMessage = '';
   errorMessage = '';
+  deleteErrorMessage = '';
   successMessage = '';
   private user: UserDetail | null = null;
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.params['id']);
     if (!Number.isInteger(id) || id <= 0) {
-      this.errorMessage = 'Invalid user ID.';
+      this.loadErrorMessage = 'Invalid user ID.';
       return;
     }
 
@@ -56,7 +61,7 @@ export class UserDetailComponent implements OnInit {
           this.populateUserForm(user);
         },
         error: (error: HttpErrorResponse) => {
-          this.errorMessage =
+          this.loadErrorMessage =
             error.status === 404
               ? 'User not found.'
               : error.status === 401
@@ -67,8 +72,10 @@ export class UserDetailComponent implements OnInit {
   }
 
   setEditMode(isEditMode: boolean): void {
+    this.confirmDelete = false;
     this.isEditMode = isEditMode;
     this.errorMessage = '';
+    this.deleteErrorMessage = '';
     this.successMessage = '';
 
     const editableControls = [
@@ -89,7 +96,44 @@ export class UserDetailComponent implements OnInit {
     this.setEditMode(false);
   }
 
-  onSubmit(): void {
+  onSubmitDelete(): void {
+    if (!this.confirmDelete) {
+      this.confirmDelete = true;
+      this.deleteErrorMessage = '';
+      return;
+    }
+
+    if (!this.user) {
+      return;
+    }
+
+    this.deleting = true;
+    this.userService
+      .deleteUser(this.user.id)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          this.deleting = false;
+          this.confirmDelete = false;
+        }),
+      )
+      .subscribe({
+        next: () => this.router.navigate(['/users']),
+        error: (error: HttpErrorResponse) => {
+          this.deleteErrorMessage =
+            error.status === 404
+              ? 'User not found.'
+              : error.error?.message ?? 'Unable to delete the user.';
+        },
+      });
+  }
+
+  cancelDelete(): void {
+    this.confirmDelete = false;
+    this.deleteErrorMessage = '';
+  }
+
+  onSubmitSave(): void {
     if (!this.user || this.userForm.invalid) {
       return;
     }
@@ -131,6 +175,7 @@ export class UserDetailComponent implements OnInit {
   private populateUserForm(user: UserDetail): void {
     this.userForm.patchValue({
       ...user,
+      password: '',
       createdAt: new Date(user.createdAt).toLocaleString(),
     });
   }
